@@ -5,6 +5,10 @@ app.use(bodyParser.json())
 var morgan = require('morgan')
 app.use(morgan('tiny'))
 
+const cors = require('cors')
+
+app.use(cors())
+
 console.log(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 let numerot = [  { 
@@ -177,7 +181,7 @@ else{
 
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
