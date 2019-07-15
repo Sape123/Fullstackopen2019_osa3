@@ -1,8 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 app.use(express.static('build'))
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+const Luettelo = require('./models/person')
+
 
 const cors = require('cors')
 
@@ -50,6 +53,7 @@ return (
 }
 
 
+  
   res.send(sivu())
 
 })
@@ -76,8 +80,6 @@ app.post('/api/persons', (request, response) => {
 console.log(body)  
 
 
-let rId = Math.random(1000000)
-
 if(!body.name){
 
 
@@ -90,51 +92,23 @@ if(!body.name){
   
   }
 
-nimet = numerot.map(nam => nam.name)
 
 
 
- 
+const numbero = new Luettelo({
+name:body.name,
+number:body.number
+})
 
-  var found = nimet.find(function(element) {
-    return element === body.name;
-  });
-
-
-
-
-if( typeof found === 'string'){
-  return response.status(400).json({
-  
-    error: 'nimi on jo'
-    
-    })
+numbero.save().then(savedNote => {
+  response.json(savedNote.toJSON())
 
 }
 
+)
 
 
 
-
-
-
-
- 
-  
-const numero = {
-  id: rId,
-name: body.name,
-number: body.number
-
-
-}
-
-
-numerot = numerot.concat(numero)
-  
-
-
-  response.json(numero)
 
 })
 
@@ -151,36 +125,39 @@ numerot = numerot.concat(numero)
 
 app.get('/api/persons', (req, res) => {
 
+Luettelo.find({}).then(numbit=>{
 
+  res.json(numbit.map(numbi => numbi.toJSON()))
 
-  res.json(numerot)
 })
+
+  
+
+
+
+
+})
+
+
+
+
+
 
 app.get('/api/persons/:id', (request, response) => {
 
 
-    const id = Number(request.params.id)
-    const numero = numerot.find(numerot => numerot.id === id)
+    Luettelo.findById(request.params.id).then(nah=>{response.json(nah.toJSON())
+    })
     
 
-if(numero){
-    response.json(numero)
 
-
-}
-else{
-   
-
-
-    response.status(404).end()
-}  
 
 })
 
 
 
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
