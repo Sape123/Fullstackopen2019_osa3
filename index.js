@@ -11,7 +11,6 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 
 
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -54,24 +53,56 @@ let numerot = [  {
     }]
 
 
-    const unknownEndpoint = (request, response) => {
-      response.status(404).send({ error: 'unknown endpoint' })
+
+    app.post('/api/persons', (request, response) => {
+  
+
+
+      const body = request.body
+    console.log(body)  
+    
+    
+    if(!body.name){
+    
+    
+      console.log(request.headers)
+      return response.status(400).json({
+      
+      error: 'no content'
+      
+      })
+      
+      }
+    
+    
+    
+    
+    const numbero = new Luettelo({
+    name:body.name,
+    number:body.number
+    })
+    
+    
+    
+    numbero.save().then(savedNote => {
+      response.json(savedNote.toJSON())
+    
     }
     
+    )
     
-    app.use(unknownEndpoint)
     
-    const errorHandler = (error, request, response, next) => {
-      console.error(error.message)
     
-      if (error.name === 'CastError' && error.kind == 'ObjectId') {
-        return response.status(400).send({ error: 'malformatted id' })
-      } 
     
-      next(error)
-    }
     
-    app.use(errorHandler)
+    })
+
+
+
+
+
+
+    
     
 
 
@@ -122,48 +153,6 @@ response.status(204).end()
 
 
 
-app.post('/api/persons', (request, response) => {
-  
-
-
-  const body = request.body
-console.log(body)  
-
-
-if(!body.name){
-
-
-  console.log(request.headers)
-  return response.status(400).json({
-  
-  error: 'no content'
-  
-  })
-  
-  }
-
-
-
-
-const numbero = new Luettelo({
-name:body.name,
-number:body.number
-})
-
-
-
-numbero.save().then(savedNote => {
-  response.json(savedNote.toJSON())
-
-}
-
-)
-.catch(error=>next(error))
-
-
-
-
-})
 
 
 
@@ -202,11 +191,36 @@ app.get('/api/persons/:id', (request, response) => {
       
       )
     })
+    .catch(error => next(error))
     
 
 
 
 })
+
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
+
+
+
+
 
 
 
