@@ -7,7 +7,7 @@ app.use(bodyParser.json())
 const Luettelo = require('./models/person')
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
-const morgan = require('morgan')
+
 
 
 
