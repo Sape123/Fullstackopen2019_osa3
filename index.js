@@ -4,9 +4,9 @@ const app = express()
 app.use(express.static('build'))
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+const morgan = require('morgan')
 const Luettelo = require('./models/person')
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
+
 
 
 
