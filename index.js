@@ -5,6 +5,25 @@ app.use(express.static('build'))
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 const Luettelo = require('./models/person')
+var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
+const morgan = require('morgan')
+
+
+
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+
+
+
+app.use(requestLogger)
 
 
 const cors = require('cors')
@@ -33,6 +52,32 @@ let numerot = [  {
         name:"Mary Poppendieck",
         number:"39225525525"
     }]
+
+
+    const unknownEndpoint = (request, response) => {
+      response.status(404).send({ error: 'unknown endpoint' })
+    }
+    
+    
+    app.use(unknownEndpoint)
+    
+    const errorHandler = (error, request, response, next) => {
+      console.error(error.message)
+    
+      if (error.name === 'CastError' && error.kind == 'ObjectId') {
+        return response.status(400).send({ error: 'malformatted id' })
+      } 
+    
+      next(error)
+    }
+    
+    app.use(errorHandler)
+    
+
+
+
+
+
 
 
 
@@ -105,21 +150,20 @@ name:body.name,
 number:body.number
 })
 
+
+
 numbero.save().then(savedNote => {
   response.json(savedNote.toJSON())
 
 }
 
 )
+.catch(error=>next(error))
 
 
 
 
 })
-
-
-
-
 
 
 

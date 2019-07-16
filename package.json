@@ -20,9 +20,11 @@
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "install": "^0.13.0",
-    "mongoose": "^5.6.4"
+    "mongoose": "^5.6.4",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "eslint": "^6.0.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   }
