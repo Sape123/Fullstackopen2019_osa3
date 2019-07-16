@@ -59,11 +59,16 @@ return (
 })
 
 
-app.delete('/api/persons/:id', function (req, res) {
-  const id = Number(req.params.id)
-  numerot = numerot.filter(numero => numero.id !== id)
-  res.status(404).end()
+app.delete('/api/persons/:id', function (req,  response, next) {
+  console.log(req.param.id)
+ Luettelo.findByIdAndRemove(req.params.id)
+ .then(result=> {
+console.log(req.param.id)
+response.status(204).end()
 
+ })
+ 
+ .catch(error => next(error))
 
 })
 
@@ -146,7 +151,12 @@ Luettelo.find({}).then(numbit=>{
 app.get('/api/persons/:id', (request, response) => {
 
 
-    Luettelo.findById(request.params.id).then(nah=>{response.json(nah.toJSON())
+    Luettelo.findById(request.params.id)
+    .then(nah=>{
+      response.json(nah.toJSON()
+      
+      
+      )
     })
     
 
