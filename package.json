@@ -20,7 +20,7 @@
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "install": "^0.13.0",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.7.5",
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
